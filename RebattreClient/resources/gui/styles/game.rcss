@@ -1,0 +1,73 @@
+body
+{
+		padding: 0px;
+		margin: 0px;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+}
+
+game
+{
+		display: block;
+		width: 100%;
+		height: 100%;
+}
+
+div
+{
+		height: 47px;
+		padding: 9px 0px 0px 65px;
+		margin: 0px 20px;
+		font-size: 20;
+}
+
+div#player_left_div
+{
+		float: left;
+		width: 155px;
+		font-size: 30;
+
+		outline-font-effect: outline;
+		outline-width: 2px;
+		outline-color: black;
+}
+
+div#player_right_div
+{
+		float: right;
+		width: 80px;
+		font-size: 30;
+
+		outline-font-effect: outline;
+		outline-width: 2px;
+		outline-color: black;
+}
+
+icon
+{
+		display: block;
+		position: absolute;
+}
+
+div#player_left_div icon
+{
+		left: 20px;
+		top: 15px;
+		width: 50px;
+		height: 50px;
+
+		background-decorator: image;
+		background-image: /gui/textures/UIAtlas.png 135px 148px 185px 193px;
+}
+
+div#player_right_div icon
+{
+		left: 20px;
+		top: 15px;
+		width: 50px;
+		height: 50px;
+
+		background-decorator: image;
+		background-image: /gui/textures/UIAtlas.png 383px 150px 433px 200px;
+}

@@ -1,0 +1,25 @@
+{
+	sType: SceneNode
+	sName: MainScene
+	aObjects: [
+		{
+			sType: Image
+			sName: SplashImage
+			sResource: gui/textures/Splash.png
+			cPosition: {z: -1000}
+			bVisible: false
+		}
+		{
+			sType: Image
+			sName: TitleImage
+			sResource: gui/textures/menu_background.png
+			cPosition: {z: 1000}
+		}
+		{
+			sType: Camera
+			sName: MainCamera
+			sProjection: Orthogonal
+			cPosition: {x: -400, y: -300}
+		}
+	]
+}
