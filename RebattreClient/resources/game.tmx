@@ -16,17 +16,10 @@
   </object>
   <object name="PlayerLeft" x="61" y="424">
    <properties>
-    <property name="Class" value="PlayerLeft"/>
+    <property name="Class" value="Player"/>
    </properties>
   </object>
-  <object name="PointBorder" x="34" y="138" width="3" height="588">
-   <properties>
-    <property name="Class" value="Trigger"/>
-    <property name="Once" value="true"/>
-    <property name="Target" value="PlayerLeft"/>
-   </properties>
-  </object>
-  <object name="PointBorder" x="827" y="138" width="3" height="587">
+  <object name="PointBorderRight" x="835" y="138" width="3" height="587">
    <properties>
     <property name="Class" value="Trigger"/>
     <property name="Once" value="true"/>
@@ -35,12 +28,21 @@
   </object>
   <object name="PlayerRight" x="803" y="430">
    <properties>
-    <property name="Class" value="PlayerRight"/>
+    <property name="Class" value="Player"/>
+   </properties>
+  </object>
+  <object name="PointBorderLeft" x="28" y="138" width="3" height="588">
+   <properties>
+    <property name="Class" value="Trigger"/>
+    <property name="Once" value="true"/>
+    <property name="Target" value="PlayerLeft"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup name="Colliders" width="26" height="26">
-  <object x="1" y="131" width="830" height="4"/>
+  <object x="-33" y="99" width="926" height="36"/>
   <object x="1" y="728" width="831" height="4"/>
+  <object x="-60" y="137" width="3" height="588"/>
+  <object x="899" y="138" width="3" height="587"/>
  </objectgroup>
 </map>

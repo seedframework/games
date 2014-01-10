@@ -1,0 +1,47 @@
+<rml>
+	<head>
+		<title>Lobby</title>
+		<link type="text/template" href="window.rml" />
+		<style>
+			body
+			{
+				width: 500px;
+				height: 325px;
+
+				margin: auto;
+			}
+
+			div#title_bar div#icon
+			{
+				display: none;
+			}
+
+			div#content
+			{
+				text-align: center;
+			}
+			p
+			{
+				text-align: center;
+				margin-bottom: 1em;
+			}
+		</style>
+	</head>
+	<body template="window">
+		<div>
+			<br/><br/>
+			<form onSubmit="goto game">
+				<p>
+					<strong>IP Address:</strong>
+					<input type="text" name="ip" id="ip" size=16 maxlenght=16/>
+					<strong>Port:</strong>
+					<input type="text" name="port" size=4 maxlenght=4/>
+					<input type="submit" value="create">Create Game</input>
+					<input type="submit" value="join">Join Game</input>
+				</p>
+			</form>
+			<br/><br/><br/><br/><br/><br/>
+			<button onClick="goto menu">Back</button>
+		</div>
+	</body>
+</rml>

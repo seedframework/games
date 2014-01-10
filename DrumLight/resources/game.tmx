@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="26" height="26" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tiles1" tilewidth="32" tileheight="32">
+  <image source="textures/GameAtlas.png" width="160" height="160"/>
+ </tileset>
+ <layer name="Background" width="26" height="26">
+  <data encoding="base64" compression="zlib">
+   eJztzjEWABAMBNEQhPtfWG6g2YJniqn/uJk5PdPIiqA4OE3023FwcHBwcC50ZlYFLdHv723/Iwf/
+  </data>
+ </layer>
+ <objectgroup name="Game" width="26" height="26">
+  <object name="Piece" x="429" y="457">
+   <properties>
+    <property name="Class" value="Piece"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Colliders" width="26" height="26">
+  <object x="-33" y="99" width="926" height="36"/>
+  <object x="1" y="728" width="831" height="4"/>
+  <object x="154" y="136" width="3" height="588"/>
+  <object x="707" y="136" width="3" height="587"/>
+ </objectgroup>
+</map>

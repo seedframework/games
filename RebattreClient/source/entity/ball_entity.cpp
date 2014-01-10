@@ -6,36 +6,37 @@
 #include <Sprite.h>
 #include "../scene/game_scene.h"
 #include "../util/sounds.h"
+#include "../net/rs_client.h"
 
 ENTITY_CREATOR("Ball", BallEntity)
 
 BallEntity::BallEntity()
 	: SpriteEntity("Ball", "Ball")
+	, fSpeed(1.0f)
 {
 }
 
-void BallEntity::Load(Seed::IMetadataObject &metadata, Seed::SceneNode *sprites)
+BallEntity::~BallEntity()
+{
+	gPhysicsManager->DestroyBody(pBody);
+}
+
+void BallEntity::Load(Seed::MetadataObject &metadata, Seed::SceneNode *sprites)
 {
 	SpriteEntity::Load(metadata, sprites);
+	b2Vec2 customSize(22, 22);
 
-	pBody = gPhysicsManager->CreateBody(pSprite, b2_dynamicBody, ShapeForm::CIRCLE);
+	pBody = gPhysicsManager->CreateBody(pSprite, &customSize);
 	pBody->SetFixedRotation(true);
 	pBody->GetFixtureList()->SetUserData(this);
-	pBody->ApplyLinearImpulse(b2Vec2(-10, 5), pBody->GetPosition());
+
+	vDirection = b2Vec2(-1, -1);
 }
 
 void BallEntity::Restart()
 {
-	pBody->SetLinearVelocity(b2Vec2(0,0));
-	pBody->SetAngularVelocity(0);
-
-	pBody->SetTransform(b2Vec2(0, 0), 0.0f);
-	pBody->ApplyLinearImpulse(b2Vec2(-10, 5), pBody->GetPosition());
-}
-
-Vector3f BallEntity::GetPosition()
-{
-	return pSprite->GetPosition();
+	b2Vec2 pos = b2Vec2(0, 0);
+	pBody->SetTransform(pos, pBody->GetAngle());
 }
 
 Sprite *BallEntity::GetSprite() const
@@ -45,6 +46,41 @@ Sprite *BallEntity::GetSprite() const
 
 void BallEntity::Update(f32 dt)
 {
-	UNUSED(dt)
+	pBody->SetTransform(pBody->GetPosition() + ((fSpeed * dt) * vDirection), pBody->GetAngle());
+}
+
+void BallEntity::OnCollision(const CollisionEvent &event)
+{
+	if (event.GetType() == CollisionEventType::OnEnter)
+	{
+		Entity *other = event.GetOtherEntity();
+
+		// Confirm ball position
+//		pBody->SetTransform(pRSClient->sPacketData.vBall, pBody->GetAngle());
+
+		// Normalize
+		vDirection *= vDirection.Normalize();
+
+		if(other == NULL)
+		{
+			// Invert diection
+			vDirection.y *=-1;
+		}
+		if(other != NULL && other->GetName() == "PlayerRight")
+		{
+			// Invert diection
+			vDirection.x *=-1;
+		}
+
+		if(other != NULL && other->GetName() == "PlayerLeft")
+		{
+			// Invert diection
+			vDirection.x *=-1;
+		}
+
+		// Confirm ball position
+//		pRSClient->sPacketData.vBall = pBody->GetPosition();
+//		pRSClient->cSocket.Send(pRSClient->cAddress, &pRSClient->sPacketData, sizeof(pRSClient->sPacketData));
+	}
 }
 

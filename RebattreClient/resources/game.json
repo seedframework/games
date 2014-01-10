@@ -32,7 +32,7 @@
                  "name":"PlayerLeft",
                  "properties":
                     {
-                     "Class":"PlayerLeft"
+                     "Class":"Player"
                     },
                  "type":"",
                  "width":0,
@@ -40,22 +40,8 @@
                  "y":424
                 }, 
                 {
-                 "height":588,
-                 "name":"PointBorder",
-                 "properties":
-                    {
-                     "Class":"Trigger",
-                     "Once":"true",
-                     "Target":"PlayerLeft"
-                    },
-                 "type":"",
-                 "width":3,
-                 "x":34,
-                 "y":138
-                }, 
-                {
                  "height":587,
-                 "name":"PointBorder",
+                 "name":"PointBorderRight",
                  "properties":
                     {
                      "Class":"Trigger",
@@ -64,7 +50,7 @@
                     },
                  "type":"",
                  "width":3,
-                 "x":827,
+                 "x":835,
                  "y":138
                 }, 
                 {
@@ -72,12 +58,26 @@
                  "name":"PlayerRight",
                  "properties":
                     {
-                     "Class":"PlayerRight"
+                     "Class":"Player"
                     },
                  "type":"",
                  "width":0,
                  "x":803,
                  "y":430
+                }, 
+                {
+                 "height":588,
+                 "name":"PointBorderLeft",
+                 "properties":
+                    {
+                     "Class":"Trigger",
+                     "Once":"true",
+                     "Target":"PlayerLeft"
+                    },
+                 "type":"",
+                 "width":3,
+                 "x":28,
+                 "y":138
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -91,16 +91,16 @@
          "name":"Colliders",
          "objects":[
                 {
-                 "height":4,
+                 "height":36,
                  "name":"",
                  "properties":
                     {
 
                     },
                  "type":"",
-                 "width":830,
-                 "x":1,
-                 "y":131
+                 "width":926,
+                 "x":-33,
+                 "y":99
                 }, 
                 {
                  "height":4,
@@ -113,6 +113,30 @@
                  "width":831,
                  "x":1,
                  "y":728
+                }, 
+                {
+                 "height":588,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "width":3,
+                 "x":-60,
+                 "y":137
+                }, 
+                {
+                 "height":587,
+                 "name":"",
+                 "properties":
+                    {
+
+                    },
+                 "type":"",
+                 "width":3,
+                 "x":899,
+                 "y":138
                 }],
          "opacity":1,
          "type":"objectgroup",

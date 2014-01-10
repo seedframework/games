@@ -2,6 +2,7 @@
 #include "entity_factory.h"
 #include "ball_entity.h"
 #include "../scene/game_scene.h"
+#include "../manager/gui_manager.h"
 
 ENTITY_CREATOR("Trigger", TriggerEntity)
 
@@ -10,7 +11,11 @@ TriggerEntity::TriggerEntity()
 {
 }
 
-void TriggerEntity::Load(Seed::IMetadataObject &metadata, Seed::SceneNode *sprites)
+TriggerEntity::~TriggerEntity()
+{
+}
+
+void TriggerEntity::Load(Seed::MetadataObject &metadata, Seed::SceneNode *sprites)
 {
 	Entity::Load(metadata, sprites);
 	clSensor.Load(metadata, this);
@@ -20,20 +25,21 @@ void TriggerEntity::OnCollision(const CollisionEvent &event)
 {
 	Entity *other = event.GetOtherEntity();
 
-	if(event.GetType() == CollisionEventType::ON_ENTER)
+	if(event.GetType() == CollisionEventType::OnEnter)
 	{
 		if(other != NULL && other->GetClassName().compare("Ball") == 0)
 		{
-			Log("ON_ENTER: Ball");
-			this->DoActivateAll();
+			if(this->GetTarget() == "PlayerLeft")
+				gGui->SetRightPlayerPoints(gGui->GetRightPlayerPoints() + 1);
+			else
+				gGui->SetLeftPlayerPoints(gGui->GetLeftPlayerPoints() + 1);
 		}
 	}
 
-	if(event.GetType() == CollisionEventType::ON_LEAVE)
+	if(event.GetType() == CollisionEventType::OnLeave)
 	{
 		if(other != NULL && other->GetClassName().compare("Ball") == 0)
 		{
-			Log("ON_LEAVE: PointBorder");
 			BallEntity *ball = static_cast<BallEntity*>(other);
 			ball->Restart();
 		}

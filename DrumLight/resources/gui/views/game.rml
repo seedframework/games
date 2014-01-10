@@ -1,0 +1,34 @@
+<rml>
+	<head>
+		<title>game</title>
+		<link type="text/template" href="gameplay.rml" />
+	</head>
+	<body id="game_window">
+		<game id="game">
+			<div id="score_div">
+				<p>
+					<h1>Time:</h1>
+					<span id="time">00:43</span>
+				</p>
+				<p>
+					<h1>Score:</h1>
+					<span id="score">1000</span>
+				</p>
+				<p>
+					<h1>High score:</h1>
+					<span id="highscore">584320</span>
+				</p>
+			</div>
+			<div id="piece_info_div">
+				<p>
+					<h1>Next piece:</h1>
+					<span>[PIECE]</span>
+				</p>
+				<p>
+					<h1>Direction:</h1>
+					<span>[DIRECTION]</span>
+				</p>
+			</div>
+		</game>
+	</body>
+</rml>

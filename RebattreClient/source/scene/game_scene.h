@@ -4,14 +4,14 @@
 #include <api/rocket/RocketInterface.h>
 
 #include "../defines.h"
-#include "../states/game_pause_state.h"
+#include "../states/game/game_pause_state.h"
 #include "../states/gameover_state.h"
-#include "../states/game_run_state.h"
-#include "../controller/camera_controller.h"
-#include "../controller/world_controller.h"
-#include "../controller/sound_controller.h"
-#include "../entity/player_left_entity.h"
-#include "../entity/player_right_entity.h"
+#include "../states/game/game_run_state.h"
+#include "../manager/camera_manager.h"
+#include "../manager/physics_manager.h"
+#include "../manager/world_manager.h"
+#include "../manager/sound_manager.h"
+#include "../entity/player_entity.h"
 
 using namespace Seed::RocketGui;
 
@@ -19,14 +19,15 @@ class GameScene;
 
 extern SceneNode *gScene;
 extern PhysicsManager *gPhysicsManager;
-extern SoundController *gSoundController;
-extern WorldController *gWorldController;
+extern SoundManager *gSoundManager;
+extern WorldManager *gWorldManager;
 extern GameScene *gGameScene;
 
 class GameScene : public IEventInputKeyboardListener,
-				  public IEventJobListener,
 				  public IRocketEventListener
 {
+	SEED_DISABLE_COPY(GameScene)
+
 	public:
 		GameScene(SceneNode *parent, Camera *mainCamera, const String &sceneFile);
 		virtual ~GameScene();
@@ -41,9 +42,8 @@ class GameScene : public IEventInputKeyboardListener,
 		// IEventInputKeyboardListener
 		virtual void OnInputKeyboardRelease(const EventInputKeyboard *ev);
 
-		// IEventJobListener
-		virtual void OnJobCompleted(const EventJob *ev);
-		virtual void OnJobAborted(const EventJob *ev);
+		// IEventInputKeyboardListener
+		virtual void OnInputKeyboardPress(const EventInputKeyboard *ev);
 
 		// IRocketEventListener
 		virtual void OnGuiEvent(Rocket::Core::Event &ev, const Rocket::Core::String &script);
@@ -51,13 +51,12 @@ class GameScene : public IEventInputKeyboardListener,
 		// Load
 		virtual void LoadMapColliders();
 
-	private:
-		SEED_DISABLE_COPY(GameScene);
 
-		PlayerLeftEntity	*pPlayerLeft;
-		PlayerRightEntity	*pPlayerRight;
+	private:
+		PlayerEntity		*pPlayerLeft;
+		PlayerEntity		*pPlayerRight;
 		Camera				*pCamera;
-		CameraController	clCamera;
+		CameraManager		cCamera;
 		SceneNode			*pParentScene;
 		SceneNode			cScene;
 		Music				musTheme;
@@ -65,9 +64,9 @@ class GameScene : public IEventInputKeyboardListener,
 		bool				bPaused;
 		bool				bInitialized;
 
-		WorldController	cWorldController;
+		WorldManager	cWorldManager;
 		PhysicsManager	cPhysicsManager;
-		SoundController	cSoundController;
+		SoundManager	cSoundManager;
 
 		// State Machine
 		StateMachine		cFlow;

@@ -1,0 +1,109 @@
+body
+{
+		padding: 0px;
+		margin: 0px;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+}
+
+game
+{
+		display: block;
+		width: 100%;
+		height: 100%;
+}
+
+div
+{
+		height: 100%;
+		padding: 0px 0px 0px 0px;
+		margin: 4px 2px;
+		font-size: 20;
+}
+
+div#score_div
+{
+		float: left;
+		width: 120px;
+		font-size: 30;
+
+		outline-font-effect: outline;
+		outline-width: 2px;
+		outline-color: black;
+}
+
+div#piece_info_div
+{
+		float: right;
+		width: 120px;
+		font-size: 30;
+
+		outline-font-effect: outline;
+		outline-width: 2px;
+		outline-color: black;
+}
+
+div#score_div h1
+{
+		float: left;
+		width: 120px;
+		font-size: 12;
+
+		outline-font-effect: outline;
+		outline-width: 2px;
+		outline-color: black;
+}
+
+div#piece_info_div h1
+{
+		float: left;
+		width: 120px;
+		font-size: 12;
+
+		outline-font-effect: outline;
+		outline-width: 2px;
+		outline-color: black;
+}
+
+div#score_div span
+{
+		float: left;
+		width: 110px;
+		font-size: 24;
+		text-align: right;
+
+		outline-font-effect: outline;
+		outline-width: 2px;
+		outline-color: black;
+}
+
+div#piece_info_div span
+{
+		float: left;
+		width: 110px;
+		font-size: 24;
+		text-align: right;
+
+		outline-font-effect: outline;
+		outline-width: 2px;
+		outline-color: black;
+}
+
+icon
+{
+		display: block;
+		position: absolute;
+}
+
+div#player_div icon
+{
+		left: 20px;
+		top: 15px;
+		width: 50px;
+		height: 50px;
+
+		background-decorator: image;
+		background-image: /gui/textures/UIAtlas.png 135px 148px 185px 193px;
+}
+

@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{1b6a2128-5494-4b70-b4b9-d89a4181f160}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="entity">
+      <UniqueIdentifier>{12b8b25b-7c69-460b-b79f-889af9fa94e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="manager">
+      <UniqueIdentifier>{cd1281de-28a1-43e3-affa-337efb9b8e78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="net">
+      <UniqueIdentifier>{8fa24da7-276a-40eb-9405-32b1b8862ed5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="scene">
+      <UniqueIdentifier>{322379bf-470d-48da-9e45-9b68c451faf5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="states">
+      <UniqueIdentifier>{31a80605-b1eb-43f6-937e-267fc4cb400c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{01f01aed-48e3-4a39-b018-963ad1edfc96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="states\game">
+      <UniqueIdentifier>{8c585937-2952-4898-bd59-e93a3606733a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\source\gameflow.cpp" />
+    <ClCompile Include="..\..\..\source\main.cpp" />
+    <ClCompile Include="..\..\..\source\data\game_data.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\data\rs_data.cpp">
+      <Filter>data</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\entity\ball_entity.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\entity\entity.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\entity\entity_factory.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\entity\player_entity.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\entity\sprite_entity.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\entity\trigger_entity.cpp">
+      <Filter>entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\manager\camera_manager.cpp">
+      <Filter>manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\manager\gui_manager.cpp">
+      <Filter>manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\manager\physics_manager.cpp">
+      <Filter>manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\manager\sound_manager.cpp">
+      <Filter>manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\manager\world_manager.cpp">
+      <Filter>manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\net\rs_client.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\util\collision_sensor.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\states\credits_state.cpp">
+      <Filter>states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\states\game_state.cpp">
+      <Filter>states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\states\gameover_state.cpp">
+      <Filter>states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\states\lobby_state.cpp">
+      <Filter>states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\states\main_menu_state.cpp">
+      <Filter>states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\states\options_state.cpp">
+      <Filter>states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\states\splash_state.cpp">
+      <Filter>states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\states\game\game_pause_state.cpp">
+      <Filter>states\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\states\game\game_run_state.cpp">
+      <Filter>states\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\scene\game_scene.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\source\gameflow.h" />
+    <ClInclude Include="..\..\..\source\defines.h" />
+    <ClInclude Include="..\..\..\source\data\game_data.h">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\data\rs_data.h">
+      <Filter>data</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\entity\ball_entity.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\entity\entity.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\entity\entity_factory.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\entity\player_entity.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\entity\sprite_entity.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\entity\trigger_entity.h">
+      <Filter>entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\manager\camera_manager.h">
+      <Filter>manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\manager\gui_manager.h">
+      <Filter>manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\manager\physics_manager.h">
+      <Filter>manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\manager\sound_manager.h">
+      <Filter>manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\manager\world_manager.h">
+      <Filter>manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\net\rs_client.h">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\util\collision_sensor.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\util\sounds.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\states\credits_state.h">
+      <Filter>states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\states\game_state.h">
+      <Filter>states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\states\gameover_state.h">
+      <Filter>states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\states\lobby_state.h">
+      <Filter>states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\states\main_menu_state.h">
+      <Filter>states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\states\options_state.h">
+      <Filter>states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\states\splash_state.h">
+      <Filter>states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\states\game\game_pause_state.h">
+      <Filter>states\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\states\game\game_run_state.h">
+      <Filter>states\game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\scene\game_scene.h">
+      <Filter>scene</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

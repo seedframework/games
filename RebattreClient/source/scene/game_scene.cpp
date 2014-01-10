@@ -1,24 +1,18 @@
 #include "game_scene.h"
 #include "../gameflow.h"
-#include "../controller/world_controller.h"
-#include <SceneNode.h>
+#include "../manager/gui_manager.h"
 
 SceneNode *gScene = NULL;
 PhysicsManager *gPhysicsManager = NULL;
-SoundController *gSoundController =NULL;
-WorldController *gWorldController = NULL;
+SoundManager *gSoundManager =NULL;
+WorldManager *gWorldManager = NULL;
 GameScene *gGameScene = NULL;
-
-enum
-{
-	kJobLoadScene
-};
 
 GameScene::GameScene(SceneNode *parent, Camera *mainCamera, const String &sceneFile)
 	: pPlayerLeft(NULL)
 	, pPlayerRight(NULL)
 	, pCamera(mainCamera)
-	, clCamera()
+	, cCamera()
 	, pParentScene(parent)
 	, musTheme()
 	, bPaused(false)
@@ -28,8 +22,8 @@ GameScene::GameScene(SceneNode *parent, Camera *mainCamera, const String &sceneF
 {
 	gScene = &cScene;
 	gPhysicsManager = &cPhysicsManager;
-	gSoundController = &cSoundController;
-	gWorldController = &cWorldController;
+	gSoundManager = &cSoundManager;
+	gWorldManager = &cWorldManager;
 	gGameScene = this;
 }
 
@@ -58,15 +52,81 @@ bool GameScene::Initialize()
 
 	cFlow.Initialize(&cRun);
 
+	auto cb = [&](Job *self)
+	{
+		auto job = static_cast<FileLoader *>(self);
+
+		if(job->GetState() == eJobState::Completed)
+		{
+			Reader r(job->pFile);
+			cScene.Load(r);
+			Log("Scene Name: %s len %d", cScene.sName.c_str(), cScene.Size());
+			sdDelete(job);
+
+			// Validate the music to play
+			if (gGameData->IsBgmEnabled() == true)
+			{
+				musTheme.Load("sounds/gameplay_music.ogg");
+				musTheme.SetVolume(1.0f);
+				pSoundSystem->PlayMusic(&musTheme);
+			}
+
+			SceneNode *sprites = (SceneNode *)cScene.GetChildByName("Sprites");
+			pGameMap = (GameMap *)cScene.GetChildByName("Map");
+
+			MapLayerMetadata *game = pGameMap->GetLayerByName("Game")->AsMetadata();
+			game->SetVisible(false);
+
+			for (unsigned i = 0, len = game->Size(); i < len; ++i)
+			{
+				MetadataObject *placeHolder = static_cast<MetadataObject *>(game->GetChildAt(i));
+				//const String &type = placeHolder->GetProperty("Type");
+				//if (type == "Entity")
+				{
+					Entity* entity = cWorldManager.BuildEntity(*placeHolder, sprites);
+
+					if (entity->GetName() == "PlayerLeft")
+					{
+						pPlayerLeft = static_cast<PlayerEntity*>(entity);
+					}
+					if (entity->GetName() == "PlayerRight")
+					{
+						pPlayerRight = static_cast<PlayerEntity*>(entity);
+					}
+				}
+			}
+
+			this->LoadMapColliders();
+			cCamera.SetCamera(pCamera);
+
+			MapLayerTiled *bg = pGameMap->GetLayerByName("Background")->AsTiled();
+
+			f32 hw = bg->GetWidth() * 0.5f;
+			f32 hh = bg->GetHeight() * 0.5f;
+			cCamera.SetArea(Rect4f(-hw, -hh, bg->GetWidth(), bg->GetHeight()));
+
+			sprites->SetVisible(false);
+
+			pGameOverImg = (Image *)cScene.GetChildByName("GameOverImage");
+			pGameOverImg->SetVisible(false);
+
+			bInitialized = true;
+		}
+		else if(job->GetState() == eJobState::Aborted)
+		{
+			// ...
+		}
+	};
+
+	String f("scenes/");
+	pJobManager->Add(sdNew(FileLoader(f + sSceneFile, cb)));
+
 	RocketEventManager::AddListener(this);
 	pInput->AddKeyboardListener(this);
 
-	String f("scenes/");
-	pJobManager->Add(New(FileLoader(f + sSceneFile, kJobLoadScene, this)));
-
 	// Get the initial points from game data
-	gFlow->SetLeftPlayerPoints(gGameData->GetLeftPlayerPoints());
-	gFlow->SetRightPlayerPoints(gGameData->GetRightPlayerPoints());
+	gGui->SetLeftPlayerPoints(gGameData->GetLeftPlayerPoints());
+	gGui->SetRightPlayerPoints(gGameData->GetRightPlayerPoints());
 
 	return true;
 }
@@ -80,7 +140,7 @@ bool GameScene::Update(f32 dt)
 	if (!bPaused)
 	{
 		cPhysicsManager.Update(dt);
-		cWorldController.Update(dt);
+		cWorldManager.Update(dt);
 	}
 
 	if(gGameData->GetLeftPlayerPoints() == 5)
@@ -116,7 +176,7 @@ bool GameScene::Shutdown()
 {
 	musTheme.Unload();
 
-	cWorldController.Clear();
+	cWorldManager.Clear();
 
 	pParentScene->Remove(&cScene);
 	cScene.Unload();
@@ -131,7 +191,7 @@ bool GameScene::Shutdown()
 void GameScene::OnInputKeyboardRelease(const EventInputKeyboard *ev)
 {
 	Key k = ev->GetKey();
-	if (k == Seed::KeyEscape)
+	if (k == eKey::Escape)
 	{
 		if (bPaused)
 			cFlow.OnEvent(&cOnRun, this);
@@ -140,76 +200,21 @@ void GameScene::OnInputKeyboardRelease(const EventInputKeyboard *ev)
 	}
 }
 
-void GameScene::OnJobCompleted(const EventJob *ev)
+void GameScene::OnInputKeyboardPress(const EventInputKeyboard *ev)
 {
-	switch (ev->GetName())
-	{
-		case kJobLoadScene:
-		{
-			FileLoader *job = (FileLoader *)ev->GetJob();
-			Reader r(job->pFile);
-			cScene.Load(r);
-			Log("Scene Name: %s len %d", cScene.sName.c_str(), cScene.Size());
-			Delete(job);
-
-			// Validate the music to play
-			if (gGameData->IsBgmEnabled() == true)
-			{
-				musTheme.Load("sounds/gameplay_music.ogg");
-				musTheme.SetVolume(1.0f);
-				pSoundSystem->PlayMusic(&musTheme);
-			}
-
-			SceneNode *sprites = (SceneNode *)cScene.GetChildByName("Sprites");
-			pGameMap = (GameMap *)cScene.GetChildByName("Map");
-
-			MapLayerMetadata *game = pGameMap->GetLayerByName("Game")->AsMetadata();
-			//game->SetVisible(false);
-
-			for (unsigned i = 0, len = game->Size(); i < len; ++i)
-			{
-				IMetadataObject *placeHolder = static_cast<IMetadataObject *>(game->GetChildAt(i));
-				//const String &type = placeHolder->GetProperty("Type");
-				//if (type == "Entity")
-				{
-					Entity* entity = cWorldController.BuildEntity(*placeHolder, sprites);
-					//Log("%s", entity->GetName().c_str());
-					if (entity->GetClassName() == "PlayerLeft")
-					{
-						pPlayerLeft = static_cast<PlayerLeftEntity*>(entity);
-					}
-					if (entity->GetClassName() == "PlayerRight")
-					{
-						pPlayerRight = static_cast<PlayerRightEntity*>(entity);
-					}
-				}
-			}
-
-			this->LoadMapColliders();
-
-			clCamera.SetCamera(pCamera);
-
-			MapLayerTiled *bg = pGameMap->GetLayerByName("Background")->AsTiled();
-
-			f32 hw = bg->GetWidth() * 0.5f;
-			f32 hh = bg->GetHeight() * 0.5f;
-			clCamera.SetArea(Rect4f(-hw, -hh, bg->GetWidth(), bg->GetHeight()));
-
-			sprites->SetVisible(false);
-
-			pGameOverImg = (Image *)cScene.GetChildByName("GameOverImage");
-			pGameOverImg->SetVisible(false);
-
-			bInitialized = true;
-		}
-		break;
-	}
+	UNUSED(ev);
 }
 
-void GameScene::OnJobAborted(const EventJob *ev)
+void GameScene::LoadMapColliders()
 {
-	Job *job = ev->GetJob();
-	Delete(job);
+	MapLayerMetadata *game = pGameMap->GetLayerByName("Colliders")->AsMetadata();
+	game->SetVisible(false);
+	for (unsigned i = 0, len = game->Size(); i < len; ++i)
+	{
+		MetadataObject *placeHolder = static_cast<MetadataObject *>(game->GetChildAt(i));
+
+		cPhysicsManager.CreateStaticBody(placeHolder);
+	}
 }
 
 void GameScene::OnGuiEvent(Rocket::Core::Event &ev, const Rocket::Core::String &script)
@@ -236,14 +241,3 @@ void GameScene::Resume()
 	bPaused = false;
 }
 
-void GameScene::LoadMapColliders()
-{
-	MapLayerMetadata *game = pGameMap->GetLayerByName("Colliders")->AsMetadata();
-	game->SetVisible(false);
-	for (unsigned i = 0, len = game->Size(); i < len; ++i)
-	{
-		IMetadataObject *placeHolder = static_cast<IMetadataObject *>(game->GetChildAt(i));
-
-		cPhysicsManager.CreateStaticBody(placeHolder);
-	}
-}
