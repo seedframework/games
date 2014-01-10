@@ -1,0 +1,9 @@
+{
+	aObjects: [
+		{
+			sType: Image
+			sName: BlockPrefab
+			sResource: textures/Border.png
+		}
+	]
+}
