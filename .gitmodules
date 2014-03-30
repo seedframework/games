@@ -1,3 +1,6 @@
 [submodule "reapers"]
 	path = reapers
 	url = https://github.com/ggj/reapers.git
+[submodule "reapers"]
+	path = reapers
+	url = https://github.com/ggj/optimalus.git
