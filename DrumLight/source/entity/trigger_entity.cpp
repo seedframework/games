@@ -22,4 +22,5 @@ void TriggerEntity::Load(MetadataObject &metadata, Seed::SceneNode *sprites)
 
 void TriggerEntity::OnCollision(const CollisionEvent &event)
 {
+	UNUSED(event);
 }

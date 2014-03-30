@@ -42,7 +42,7 @@ void PieceEntity::Update(f32 dt)
 	pBody->SetTransform(pBody->GetPosition() + ((fVelocity * dt) * vDirection), pBody->GetAngle());
 }
 
-void PieceEntity::OnInputKeyboardPress(const EventInputKeyboard *ev)
+bool PieceEntity::OnInputKeyboardPress(const EventInputKeyboard *ev)
 {
 	Key k = ev->GetKey();
 
@@ -73,9 +73,11 @@ void PieceEntity::OnInputKeyboardPress(const EventInputKeyboard *ev)
 		vDirection = VECTOR_ZERO;
 		vDirection += VECTOR_RIGHT;
 	}
+
+	return true;
 }
 
-void PieceEntity::OnInputKeyboardRelease(const EventInputKeyboard *ev)
+bool PieceEntity::OnInputKeyboardRelease(const EventInputKeyboard *ev)
 {
 	Key k = ev->GetKey();
 
@@ -106,4 +108,6 @@ void PieceEntity::OnInputKeyboardRelease(const EventInputKeyboard *ev)
 		vDirection += VECTOR_RIGHT;
 		vDirection = VECTOR_ZERO;
 	}
+
+	return true;
 }

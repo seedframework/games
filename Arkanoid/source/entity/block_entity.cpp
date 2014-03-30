@@ -3,7 +3,6 @@
 #include "entity_factory.h"
 
 #include <SceneNode.h>
-#include <LeakReport.h>
 #include <Sprite.h>
 #include "../scene/game_scene.h"
 #include "../util/sounds.h"
@@ -40,4 +39,5 @@ Sprite *BlockEntity::GetSprite() const
 
 void BlockEntity::Update(f32 dt)
 {
+	UNUSED(dt);
 }

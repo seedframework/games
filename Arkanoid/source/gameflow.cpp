@@ -7,12 +7,12 @@
 
 #define GAME_ID	0xF0000001
 
-GameFlow *gFlow = NULL;
-GameData *gGameData = NULL;
+GameFlow *gFlow = nullptr;
+GameData *gGameData = nullptr;
 
 GameFlow::GameFlow()
-	: pScene(NULL)
-	, pCamera(NULL)
+	: pScene(nullptr)
+	, pCamera(nullptr)
 	, sSceneFile("")
 {
 	gFlow = this;
@@ -20,62 +20,64 @@ GameFlow::GameFlow()
 
 GameFlow::~GameFlow()
 {
-	gFlow = NULL;
+	gFlow = nullptr;
 }
 
 bool GameFlow::Initialize()
 {
-	return cPres.Load("configs/game.config", [&](Presentation *, Renderer *)
+	return cPres.Load("configs/game.config", [&](Presentation *, Viewport *aborted)
 	{
-		// Create the transitions
-		cSplashToMenu.Initialize(&cSplash, &cOnMenu, &cMenu);
-		cMenuToGame.Initialize(&cMenu, &cOnGame, &cGame);
-		cMenuToOptions.Initialize(&cMenu, &cOnOptions, &cOptions);
-		cMenuToCredits.Initialize(&cMenu, &cOnCredits, &cCredits);
-		cOptionsToMenu.Initialize(&cOptions, &cOnMenu, &cMenu);
-		cCreditsToMenu.Initialize(&cCredits, &cOnMenu, &cMenu);
-		cGameToMenu.Initialize(&cGame, &cOnMenu, &cMenu);
-		cGameToLoad.Initialize(&cGame, &cOnLoad, &cLoad);
-		cLoadToGame.Initialize(&cLoad, &cOnGame, &cGame);
+		if (!aborted)
+		{
+			// Create the transitions
+			cSplashToMenu.Initialize(&cSplash, &cOnMenu, &cMenu);
+			cMenuToGame.Initialize(&cMenu, &cOnGame, &cGame);
+			cMenuToOptions.Initialize(&cMenu, &cOnOptions, &cOptions);
+			cMenuToCredits.Initialize(&cMenu, &cOnCredits, &cCredits);
+			cOptionsToMenu.Initialize(&cOptions, &cOnMenu, &cMenu);
+			cCreditsToMenu.Initialize(&cCredits, &cOnMenu, &cMenu);
+			cGameToMenu.Initialize(&cGame, &cOnMenu, &cMenu);
+			cGameToLoad.Initialize(&cGame, &cOnLoad, &cLoad);
+			cLoadToGame.Initialize(&cLoad, &cOnGame, &cGame);
 
-		// Create the State Machine.
-		cFlow.RegisterTransition(&cSplashToMenu);
-		cFlow.RegisterTransition(&cMenuToGame);
-		cFlow.RegisterTransition(&cMenuToOptions);
-		cFlow.RegisterTransition(&cMenuToCredits);
-		cFlow.RegisterTransition(&cOptionsToMenu);
-		cFlow.RegisterTransition(&cCreditsToMenu);
-		cFlow.RegisterTransition(&cGameToMenu);
-		cFlow.RegisterTransition(&cGameToLoad);
-		cFlow.RegisterTransition(&cLoadToGame);
+			// Create the State Machine.
+			cFlow.RegisterTransition(&cSplashToMenu);
+			cFlow.RegisterTransition(&cMenuToGame);
+			cFlow.RegisterTransition(&cMenuToOptions);
+			cFlow.RegisterTransition(&cMenuToCredits);
+			cFlow.RegisterTransition(&cOptionsToMenu);
+			cFlow.RegisterTransition(&cCreditsToMenu);
+			cFlow.RegisterTransition(&cGameToMenu);
+			cFlow.RegisterTransition(&cGameToLoad);
+			cFlow.RegisterTransition(&cLoadToGame);
 
-		pSoundSystem->SetMusicVolume(0.6f);
-		pSoundSystem->SetSfxVolume(0.5f);
+			pSoundSystem->SetMusicVolume(0.6f);
+			pSoundSystem->SetSfxVolume(0.5f);
 
-		pSystem->AddListener(this);
-		pInput->AddKeyboardListener(this);
+			pSystem->AddListener(this);
+			pInput->AddKeyboardListener(this);
 
-		pScene = cPres.GetRendererByName("MainRenderer")->GetScene();
-		Viewport *viewport = cPres.GetViewportByName("MainView");
+			auto viewport = cPres.GetViewportByName("MainView");
+			pScene = viewport->GetScene();
+			pCamera = viewport->GetCamera();
 
-		pCamera = viewport->GetCamera();
+			sdNew(GuiManager());
+			gGui->Initialize();
+			pScene->Add(gGui->GetSceneObject());
 
-		sdNew(GuiManager());
-		gGui->Initialize();
-		pScene->Add(gGui->GetSceneObject());
+			cFlow.Initialize(&cSplash);
 
-		cFlow.Initialize(&cSplash);
+			pSplashImg = (Image *)pScene->GetChildByName("SplashImage");
+			pSplashImg->SetVisible(true);
 
-		pSplashImg = (Image *)pScene->GetChildByName("SplashImage");
-		pSplashImg->SetVisible(true);
+			// Create the State Machine Data
+			gGameData = sdNew(GameData());
 
-		// Create the State Machine Data
-		gGameData = sdNew(GameData());
+			if (this->SaveSystemFlow())
+				pSaveSystem->Load(0, &gGameData->sPlayer, &gGameData->sOptions);
 
-		if (this->SaveSystemFlow())
-			pSaveSystem->Load(0, &gGameData->sPlayer, &gGameData->sOptions);
-
-		IGameApp::Initialize();
+			IGameApp::Initialize();
+		}
 	});
 }
 
@@ -88,12 +90,12 @@ bool GameFlow::Update(f32 dt)
 
 bool GameFlow::Shutdown()
 {
-	cMenu.OnStop(NULL);
+	cMenu.OnStop(nullptr);
 	pSaveSystem->Save(0, &gGameData->sPlayer, &gGameData->sOptions);
 
 	if (cFlow.GetCurrentState() == &cGame)
 	{
-		cGame.OnStop(NULL);
+		cGame.OnStop(nullptr);
 		cGame.LateStop();
 	}
 
@@ -135,7 +137,7 @@ void GameFlow::OnSystemShutdown(const EventSystem *ev)
 	pSystem->Shutdown();
 }
 
-void GameFlow::OnInputKeyboardRelease(const EventInputKeyboard *ev)
+bool GameFlow::OnInputKeyboardRelease(const EventInputKeyboard *ev)
 {
 	Key k = ev->GetKey();
 
@@ -151,11 +153,14 @@ void GameFlow::OnInputKeyboardRelease(const EventInputKeyboard *ev)
 		gGui->ReloadGUI();
 	else if (k == eKey::F6)
 		Rocket::Debugger::SetVisible(!Rocket::Debugger::IsVisible());
+
+	return true;
 }
 
-void GameFlow::OnInputKeyboardPress(const EventInputKeyboard *ev)
+bool GameFlow::OnInputKeyboardPress(const EventInputKeyboard *ev)
 {
 	UNUSED(ev);
+	return true;
 }
 
 void GameFlow::LoadSceneFile(const String &file)

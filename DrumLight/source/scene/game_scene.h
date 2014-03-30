@@ -40,10 +40,10 @@ class GameScene : public IEventInputKeyboardListener,
 		void Resume();
 
 		// IEventInputKeyboardListener
-		virtual void OnInputKeyboardRelease(const EventInputKeyboard *ev);
+		virtual bool OnInputKeyboardRelease(const EventInputKeyboard *ev);
 
 		// IEventInputKeyboardListener
-		virtual void OnInputKeyboardPress(const EventInputKeyboard *ev);
+		virtual bool OnInputKeyboardPress(const EventInputKeyboard *ev);
 
 		void OnJobCompleted(FileLoader *job);
 		void OnJobAborted(FileLoader *job);
@@ -93,11 +93,7 @@ class GameScene : public IEventInputKeyboardListener,
 		StateMachineTransition cGameOverToMenu;
 
 		String sSceneFile;
-
-		bool	fChangeLevel;
-
 		Image *pGameOverImg;
-
 };
 
 #endif // _GAMEFLOW_H_

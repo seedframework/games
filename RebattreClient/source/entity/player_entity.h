@@ -16,10 +16,10 @@ class PlayerEntity: public SpriteEntity,
 		virtual void Update(f32 dt);
 
 		// IEventInputKeyboardListener
-		virtual void OnInputKeyboardPress(const EventInputKeyboard *ev);
+		virtual bool OnInputKeyboardPress(const EventInputKeyboard *ev);
 
 		// IEventInputKeyboardListener
-		virtual void OnInputKeyboardRelease(const EventInputKeyboard *ev);
+		virtual bool OnInputKeyboardRelease(const EventInputKeyboard *ev);
 
 		Sprite *GetSprite() const;
 

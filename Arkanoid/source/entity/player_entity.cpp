@@ -1,6 +1,5 @@
 #include <Box2D/Common/b2Math.h>
 #include <SceneNode.h>
-#include <LeakReport.h>
 #include <Sprite.h>
 #include "player_entity.h"
 #include "entity_factory.h"
@@ -48,7 +47,7 @@ void PlayerEntity::Update(f32 dt)
 	pBody->SetTransform(pBody->GetPosition() + ((fVelocity * dt) * vDirection), pBody->GetAngle());
 }
 
-void PlayerEntity::OnInputKeyboardPress(const EventInputKeyboard *ev)
+bool PlayerEntity::OnInputKeyboardPress(const EventInputKeyboard *ev)
 {
 	Key k = ev->GetKey();
 
@@ -65,9 +64,10 @@ void PlayerEntity::OnInputKeyboardPress(const EventInputKeyboard *ev)
 		vDirection = VECTOR_ZERO;
 		vDirection += VECTOR_RIGHT;
 	}
+	return true;
 }
 
-void PlayerEntity::OnInputKeyboardRelease(const EventInputKeyboard *ev)
+bool PlayerEntity::OnInputKeyboardRelease(const EventInputKeyboard *ev)
 {
 	Key k = ev->GetKey();
 
@@ -84,4 +84,5 @@ void PlayerEntity::OnInputKeyboardRelease(const EventInputKeyboard *ev)
 	}
 
 	vDirection = VECTOR_ZERO;
+	return true;
 }

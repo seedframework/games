@@ -2,7 +2,7 @@
 #define _RS_CLIENT_H
 
 #include <Seed.h>
-#include <api/net/Socket.h>
+#include <api/net/UDPSocket.h>
 #include <Box2D/Box2D.h>
 
 using namespace Seed;
@@ -27,7 +27,7 @@ class RSClient
 		void Disconnect();
 		b2Vec2 vBall;
 		b2Vec2 vEnemyPlayer;
-		Socket cSocket;
+		UDPSocket cSocket;
 		int iIDPlayer;
 		void SetAddress(unsigned char a, unsigned char b, unsigned char c, unsigned char d, unsigned short port);
 		Address GetAddress();

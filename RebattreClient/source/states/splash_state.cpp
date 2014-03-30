@@ -24,7 +24,7 @@ void SplashState::OnStart(void *data)
 void SplashState::OnUpdate(f32 dt)
 {
 	UNUSED(dt);
-	if(iBeginStateTime + 3000 < pTimer->GetMilliseconds())
+	if (Milliseconds(iBeginStateTime + 3000) < pTimer->GetMilliseconds())
 		gFlow->Menu();
 }
 

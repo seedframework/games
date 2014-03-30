@@ -148,6 +148,7 @@ void GuiManager::ReleaseGUI()
 
 void GuiManager::OnGuiEvent(Rocket::Core::Event &ev, const Rocket::Core::String &script)
 {
+	UNUSED(ev);
 	Rocket::Core::StringList commands;
 	Rocket::Core::StringUtilities::ExpandString(commands, script, ';');
 	for (size_t i = 0; i < commands.size(); ++i)

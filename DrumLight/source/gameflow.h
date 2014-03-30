@@ -44,10 +44,10 @@ class GameFlow : public IGameApp,
 		virtual void OnSystemShutdown(const EventSystem *ev);
 
 		// IEventInputKeyboardListener
-		virtual void OnInputKeyboardRelease(const EventInputKeyboard *ev);
+		virtual bool OnInputKeyboardRelease(const EventInputKeyboard *ev);
 
 		// IEventInputKeyboardListener
-		virtual void OnInputKeyboardPress(const EventInputKeyboard *ev);
+		virtual bool OnInputKeyboardPress(const EventInputKeyboard *ev);
 
 	private:
 		bool SaveSystemFlow() const;

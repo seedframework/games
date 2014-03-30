@@ -5,19 +5,19 @@
 #include <Rocket/Debugger.h>
 #include <Rocket/Controls.h>
 
-GuiManager *gGui = NULL;
+GuiManager *gGui = nullptr;
 
 GuiManager::GuiManager()
-	: pRocket(NULL)
-	, pContext(NULL)
-	, pDoc(NULL)
+	: pRocket(nullptr)
+	, pContext(nullptr)
+	, pDoc(nullptr)
 {
 	gGui = this;
 }
 
 GuiManager::~GuiManager()
 {
-	gGui = NULL;
+	gGui = nullptr;
 }
 
 bool GuiManager::Initialize()
@@ -41,7 +41,7 @@ bool GuiManager::UnloadGUI()
 		pDoc->Hide();
 		pContext->UnloadDocument(pDoc);
 		pDoc->RemoveReference();
-		pDoc = NULL;
+		pDoc = nullptr;
 	}
 
 	return true;
@@ -58,22 +58,22 @@ bool GuiManager::LoadGUI(const String &doc)
 	{
 		Log("Loading GUI Document");
 		pDoc = pContext->LoadDocument(doc.c_str());
-		if (pDoc != NULL)
+		if (pDoc != nullptr)
 		{
 			Rocket::Core::Element *title = pDoc->GetElementById("title");
-			if (title != NULL)
+			if (title != nullptr)
 				title->SetInnerRML(pDoc->GetTitle());
 
 			pDoc->Focus();
 			pDoc->Show();
 
-			if (pDoc->GetElementById("leftPlayerPoints") != NULL)
+			if (pDoc->GetElementById("leftPlayerPoints") != nullptr)
 				pElementLeftPlayerPoints = pDoc->GetElementById("leftPlayerPoints");
 
-			if (pDoc->GetElementById("sfx") != NULL && gGameData->IsSfxEnabled())
+			if (pDoc->GetElementById("sfx") != nullptr && gGameData->IsSfxEnabled())
 				pDoc->GetElementById("sfx")->SetAttribute("checked", "");
 
-			if (pDoc->GetElementById("bgm") != NULL && gGameData->IsBgmEnabled())
+			if (pDoc->GetElementById("bgm") != nullptr && gGameData->IsBgmEnabled())
 				pDoc->GetElementById("bgm")->SetAttribute("checked", "");
 		}
 
@@ -94,7 +94,7 @@ bool GuiManager::InitializeGUI()
 	Rocket::Controls::Initialise();
 
 	pContext = Rocket::Core::CreateContext("main", Rocket::Core::Vector2i(pScreen->GetWidth(), pScreen->GetHeight()));
-	if (pContext == NULL)
+	if (pContext == nullptr)
 	{
 		Rocket::Core::Shutdown();
 		return false;
@@ -131,7 +131,7 @@ void GuiManager::ReleaseGUI()
 	if (pDoc)
 	{
 		pDoc->RemoveReference();
-		pDoc = NULL;
+		pDoc = nullptr;
 	}
 
 	pContext->RemoveReference();
@@ -142,6 +142,7 @@ void GuiManager::ReleaseGUI()
 
 void GuiManager::OnGuiEvent(Rocket::Core::Event &ev, const Rocket::Core::String &script)
 {
+	UNUSED(ev);
 	Rocket::Core::StringList commands;
 	Rocket::Core::StringUtilities::ExpandString(commands, script, ';');
 	for (size_t i = 0; i < commands.size(); ++i)
@@ -226,7 +227,7 @@ void GuiManager::OnGuiEvent(Rocket::Core::Event &ev, const Rocket::Core::String 
 }
 
 // GUI Elements
-const u32 GuiManager::GetLeftPlayerPoints()
+u32 GuiManager::GetLeftPlayerPoints() const
 {
 	return gGameData->GetLeftPlayerPoints();
 }

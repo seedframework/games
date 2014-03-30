@@ -2,14 +2,14 @@
 #include "../gameflow.h"
 #include "../manager/gui_manager.h"
 
-SceneNode *gScene = NULL;
-PhysicsManager *gPhysicsManager = NULL;
-SoundManager *gSoundManager =NULL;
-WorldManager *gWorldManager = NULL;
-GameScene *gGameScene = NULL;
+SceneNode *gScene = nullptr;
+PhysicsManager *gPhysicsManager = nullptr;
+SoundManager *gSoundManager =nullptr;
+WorldManager *gWorldManager = nullptr;
+GameScene *gGameScene = nullptr;
 
 GameScene::GameScene(SceneNode *parent, Camera *mainCamera, const String &sceneFile)
-	: pPlayerLeft(NULL)
+	: pPlayerLeft(nullptr)
 	, pCamera(mainCamera)
 	, cCamera()
 	, pParentScene(parent)
@@ -17,7 +17,6 @@ GameScene::GameScene(SceneNode *parent, Camera *mainCamera, const String &sceneF
 	, bPaused(false)
 	, bInitialized(false)
 	, sSceneFile(sceneFile)
-	, fChangeLevel(false)
 {
 	gScene = &cScene;
 	gPhysicsManager = &cPhysicsManager;
@@ -28,7 +27,7 @@ GameScene::GameScene(SceneNode *parent, Camera *mainCamera, const String &sceneF
 
 GameScene::~GameScene()
 {
-	gScene = NULL;
+	gScene = nullptr;
 }
 
 bool GameScene::Initialize()
@@ -142,7 +141,7 @@ bool GameScene::Update(f32 dt)
 		pPlayerLeft->GetSprite()->SetVisible(false);
 
 		pGameOverImg->SetVisible(true);
-		pGameOverImg->SetPosition(pCamera->GetPosition() - Vector3f(-400.0f, -300.0f, 0.0f));
+		pGameOverImg->SetPosition(pCamera->GetPosition() - vec3{-400.0f, -300.0f, 0.0f});
 		cFlow.OnEvent(&cOnGameOver, this);
 
 		gGameData->SetLeftPlayerPoints(0);
@@ -159,7 +158,7 @@ bool GameScene::Shutdown()
 
 	pParentScene->Remove(&cScene);
 	cScene.Unload();
-	pParentScene = NULL;
+	pParentScene = nullptr;
 
 	pInput->RemoveKeyboardListener(this);
 	RocketEventManager::RemoveListener(this);
@@ -167,7 +166,7 @@ bool GameScene::Shutdown()
 	return true;
 }
 
-void GameScene::OnInputKeyboardRelease(const EventInputKeyboard *ev)
+bool GameScene::OnInputKeyboardRelease(const EventInputKeyboard *ev)
 {
 	Key k = ev->GetKey();
 	if (k == eKey::Escape)
@@ -177,11 +176,13 @@ void GameScene::OnInputKeyboardRelease(const EventInputKeyboard *ev)
 		else
 			cFlow.OnEvent(&cOnPause, this);
 	}
+	return true;
 }
 
-void GameScene::OnInputKeyboardPress(const EventInputKeyboard *ev)
+bool GameScene::OnInputKeyboardPress(const EventInputKeyboard *ev)
 {
 	UNUSED(ev);
+	return true;
 }
 
 void GameScene::LoadMapColliders()

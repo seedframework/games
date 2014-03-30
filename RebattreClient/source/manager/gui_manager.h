@@ -30,10 +30,10 @@ class GuiManager : public IRocketEventListener
 		bool UnloadGUI();
 		void ReleaseGUI();
 
-		const u32 GetLeftPlayerPoints();
+		u32 GetLeftPlayerPoints() const;
 		void SetLeftPlayerPoints(const u32 points);
 
-		const u32 GetRightPlayerPoints();
+		u32 GetRightPlayerPoints() const;
 		void SetRightPlayerPoints(const u32 points);
 
 		// IRocketEventListener
@@ -53,8 +53,6 @@ class GuiManager : public IRocketEventListener
 		// GUI Elements
 		Rocket::Core::Element	*pElementLeftPlayerPoints;
 		Rocket::Core::Element	*pElementRightPlayerPoints;
-		Rocket::Core::Element	*pElementSfx;
-		Rocket::Core::Element	*pElementBgm;
 };
 
 #endif // _GUI_MANAGER_H

@@ -1,6 +1,5 @@
 #include <Box2D/Common/b2Math.h>
 #include <SceneNode.h>
-#include <LeakReport.h>
 #include <Sprite.h>
 #include "player_entity.h"
 #include "entity_factory.h"
@@ -37,8 +36,8 @@ void PlayerEntity::Load(Seed::MetadataObject &metadata, Seed::SceneNode *sprites
 	vDirection = VECTOR_ZERO;
 
 	// Send the initial position
-	if(pRSClient->iIDPlayer == pRSClient->PlayerOne && this->GetName() == "PlayerLeft"
-	|| pRSClient->iIDPlayer == pRSClient->PlayerTwo && this->GetName() == "PlayerRight")
+	if ((pRSClient->iIDPlayer == pRSClient->PlayerOne && this->GetName() == "PlayerLeft")
+		|| (pRSClient->iIDPlayer == pRSClient->PlayerTwo && this->GetName() == "PlayerRight"))
 	{
 		pRSClient->sPacketData.vRemotePlayer = pBody->GetPosition();
 		pRSClient->cSocket.Send(pRSClient->GetAddress(), &pRSClient->sPacketData, sizeof(pRSClient->sPacketData));
@@ -76,14 +75,14 @@ void PlayerEntity::Update(f32 dt)
 		pBody->SetTransform(pRSClient->vEnemyPlayer, pBody->GetAngle());
 }
 
-void PlayerEntity::OnInputKeyboardPress(const EventInputKeyboard *ev)
+bool PlayerEntity::OnInputKeyboardPress(const EventInputKeyboard *ev)
 {
 	Key k = ev->GetKey();
 
 	if (k == eKey::Up)
 	{
-		if(pRSClient->iIDPlayer == pRSClient->PlayerOne && this->GetName() == "PlayerLeft"
-		|| pRSClient->iIDPlayer == pRSClient->PlayerTwo && this->GetName() == "PlayerRight")
+		if ((pRSClient->iIDPlayer == pRSClient->PlayerOne && this->GetName() == "PlayerLeft")
+		 || (pRSClient->iIDPlayer == pRSClient->PlayerTwo && this->GetName() == "PlayerRight"))
 		{
 			bKeyPressed = true;
 			vDirection += VECTOR_UP;
@@ -92,23 +91,25 @@ void PlayerEntity::OnInputKeyboardPress(const EventInputKeyboard *ev)
 
 	if (k == eKey::Down)
 	{
-		if(pRSClient->iIDPlayer == pRSClient->PlayerOne && this->GetName() == "PlayerLeft"
-		|| pRSClient->iIDPlayer == pRSClient->PlayerTwo && this->GetName() == "PlayerRight")
+		if ((pRSClient->iIDPlayer == pRSClient->PlayerOne && this->GetName() == "PlayerLeft")
+		 || (pRSClient->iIDPlayer == pRSClient->PlayerTwo && this->GetName() == "PlayerRight"))
 		{
 			bKeyPressed = true;
 			vDirection += VECTOR_DOWN;
 		}
 	}
+
+	return true;
 }
 
-void PlayerEntity::OnInputKeyboardRelease(const EventInputKeyboard *ev)
+bool PlayerEntity::OnInputKeyboardRelease(const EventInputKeyboard *ev)
 {
 	Key k = ev->GetKey();
 
 	if (k == eKey::Up)
 	{
-		if(pRSClient->iIDPlayer == pRSClient->PlayerOne && this->GetName() == "PlayerLeft"
-		|| pRSClient->iIDPlayer == pRSClient->PlayerTwo && this->GetName() == "PlayerRight")
+		if ((pRSClient->iIDPlayer == pRSClient->PlayerOne && this->GetName() == "PlayerLeft")
+		||  (pRSClient->iIDPlayer == pRSClient->PlayerTwo && this->GetName() == "PlayerRight"))
 		{
 			bKeyPressed = false;
 			vDirection -= VECTOR_UP;
@@ -117,11 +118,13 @@ void PlayerEntity::OnInputKeyboardRelease(const EventInputKeyboard *ev)
 
 	if (k == eKey::Down)
 	{
-		if(pRSClient->iIDPlayer == pRSClient->PlayerOne && this->GetName() == "PlayerLeft"
-		|| pRSClient->iIDPlayer == pRSClient->PlayerTwo && this->GetName() == "PlayerRight")
+		if ((pRSClient->iIDPlayer == pRSClient->PlayerOne && this->GetName() == "PlayerLeft")
+		||  (pRSClient->iIDPlayer == pRSClient->PlayerTwo && this->GetName() == "PlayerRight"))
 		{
 			bKeyPressed = false;
 			vDirection -= VECTOR_DOWN;
 		}
 	}
+
+	return true;
 }

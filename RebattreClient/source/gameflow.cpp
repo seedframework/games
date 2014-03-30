@@ -25,61 +25,63 @@ GameFlow::~GameFlow()
 
 bool GameFlow::Initialize()
 {
-	return cPres.Load("configs/game.config", [&](Presentation *, Renderer *)
+	return cPres.Load("configs/game.config", [&](Presentation *, Viewport *aborted)
 	{
-		pSoundSystem->SetMusicVolume(0.6f);
-		pSoundSystem->SetSfxVolume(0.5f);
+		if (!aborted)
+		{
+			pSoundSystem->SetMusicVolume(0.6f);
+			pSoundSystem->SetSfxVolume(0.5f);
 
-		// Create the State Machine Data
-		gGameData = sdNew(GameData());
+			// Create the State Machine Data
+			gGameData = sdNew(GameData());
 
-		if (this->SaveSystemFlow())
-			pSaveSystem->Load(0, &gGameData->sPlayer, &gGameData->sOptions);
+			if (this->SaveSystemFlow())
+				pSaveSystem->Load(0, &gGameData->sPlayer, &gGameData->sOptions);
 
-		// Create the transitions
-		cSplashToMenu.Initialize(&cSplash, &cOnMenu, &cMenu);
-		cMenuToLobby.Initialize(&cMenu, &cOnLobby, &cLobby);
-		cMenuToOptions.Initialize(&cMenu, &cOnOptions, &cOptions);
-		cMenuToCredits.Initialize(&cMenu, &cOnCredits, &cCredits);
-		cLobbyToMenu.Initialize(&cLobby, &cOnMenu, &cMenu);
-		cOptionsToMenu.Initialize(&cOptions, &cOnMenu, &cMenu);
-		cCreditsToMenu.Initialize(&cCredits, &cOnMenu, &cMenu);
-		cGameToMenu.Initialize(&cGame, &cOnMenu, &cMenu);
-		cLobbyToGame.Initialize(&cLobby, &cOnGame, &cGame);
-		cGameToLoad.Initialize(&cGame, &cOnLoad, &cLoad);
-		cLoadToGame.Initialize(&cLoad, &cOnGame, &cGame);
+			// Create the transitions
+			cSplashToMenu.Initialize(&cSplash, &cOnMenu, &cMenu);
+			cMenuToLobby.Initialize(&cMenu, &cOnLobby, &cLobby);
+			cMenuToOptions.Initialize(&cMenu, &cOnOptions, &cOptions);
+			cMenuToCredits.Initialize(&cMenu, &cOnCredits, &cCredits);
+			cLobbyToMenu.Initialize(&cLobby, &cOnMenu, &cMenu);
+			cOptionsToMenu.Initialize(&cOptions, &cOnMenu, &cMenu);
+			cCreditsToMenu.Initialize(&cCredits, &cOnMenu, &cMenu);
+			cGameToMenu.Initialize(&cGame, &cOnMenu, &cMenu);
+			cLobbyToGame.Initialize(&cLobby, &cOnGame, &cGame);
+			cGameToLoad.Initialize(&cGame, &cOnLoad, &cLoad);
+			cLoadToGame.Initialize(&cLoad, &cOnGame, &cGame);
 
-		// Create the State Machine.
-		cFlow.RegisterTransition(&cSplashToMenu);
-		cFlow.RegisterTransition(&cMenuToLobby);
-		cFlow.RegisterTransition(&cMenuToOptions);
-		cFlow.RegisterTransition(&cMenuToCredits);
-		cFlow.RegisterTransition(&cLobbyToMenu);
-		cFlow.RegisterTransition(&cOptionsToMenu);
-		cFlow.RegisterTransition(&cCreditsToMenu);
-		cFlow.RegisterTransition(&cLobbyToGame);
-		cFlow.RegisterTransition(&cGameToMenu);
-		cFlow.RegisterTransition(&cGameToLoad);
-		cFlow.RegisterTransition(&cLoadToGame);
+			// Create the State Machine.
+			cFlow.RegisterTransition(&cSplashToMenu);
+			cFlow.RegisterTransition(&cMenuToLobby);
+			cFlow.RegisterTransition(&cMenuToOptions);
+			cFlow.RegisterTransition(&cMenuToCredits);
+			cFlow.RegisterTransition(&cLobbyToMenu);
+			cFlow.RegisterTransition(&cOptionsToMenu);
+			cFlow.RegisterTransition(&cCreditsToMenu);
+			cFlow.RegisterTransition(&cLobbyToGame);
+			cFlow.RegisterTransition(&cGameToMenu);
+			cFlow.RegisterTransition(&cGameToLoad);
+			cFlow.RegisterTransition(&cLoadToGame);
 
-		pSystem->AddListener(this);
-		pInput->AddKeyboardListener(this);
+			pSystem->AddListener(this);
+			pInput->AddKeyboardListener(this);
 
-		pScene = cPres.GetRendererByName("MainRenderer")->GetScene();
-		Viewport *viewport = cPres.GetViewportByName("MainView");
+			auto viewport = cPres.GetViewportByName("MainView");
+			pScene = viewport->GetScene();
+			pCamera = viewport->GetCamera();
 
-		pCamera = viewport->GetCamera();
+			sdNew(GuiManager());
+			gGui->Initialize();
+			pScene->Add(gGui->GetSceneObject());
 
-		sdNew(GuiManager());
-		gGui->Initialize();
-		pScene->Add(gGui->GetSceneObject());
+			cFlow.Initialize(&cSplash);
 
-		cFlow.Initialize(&cSplash);
+			pSplashImg = (Image *)pScene->GetChildByName("SplashImage");
+			pSplashImg->SetVisible(true);
 
-		pSplashImg = (Image *)pScene->GetChildByName("SplashImage");
-		pSplashImg->SetVisible(true);
-
-		IGameApp::Initialize();
+			IGameApp::Initialize();
+		}
 	});
 }
 
@@ -144,7 +146,7 @@ void GameFlow::OnSystemShutdown(const EventSystem *ev)
 	pSystem->Shutdown();
 }
 
-void GameFlow::OnInputKeyboardRelease(const EventInputKeyboard *ev)
+bool GameFlow::OnInputKeyboardRelease(const EventInputKeyboard *ev)
 {
 	Key k = ev->GetKey();
 
@@ -160,11 +162,14 @@ void GameFlow::OnInputKeyboardRelease(const EventInputKeyboard *ev)
 		gGui->ReloadGUI();
 	else if (k == eKey::F6)
 		Rocket::Debugger::SetVisible(!Rocket::Debugger::IsVisible());
+
+	return true;
 }
 
-void GameFlow::OnInputKeyboardPress(const EventInputKeyboard *ev)
+bool GameFlow::OnInputKeyboardPress(const EventInputKeyboard *ev)
 {
 	UNUSED(ev);
+	return true;
 }
 
 void GameFlow::LoadSceneFile(const String &file)

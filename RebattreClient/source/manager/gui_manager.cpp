@@ -253,7 +253,7 @@ void GuiManager::OnGuiEvent(Rocket::Core::Event &ev, const Rocket::Core::String 
 }
 
 // GUI Elements
-const u32 GuiManager::GetLeftPlayerPoints()
+u32 GuiManager::GetLeftPlayerPoints() const
 {
 	return gGameData->GetLeftPlayerPoints();
 }
@@ -266,7 +266,7 @@ void GuiManager::SetLeftPlayerPoints(u32 points)
 	gGameData->SetLeftPlayerPoints(points);
 }
 
-const u32 GuiManager::GetRightPlayerPoints()
+u32 GuiManager::GetRightPlayerPoints() const
 {
 	return gGameData->GetRightPlayerPoints();
 }

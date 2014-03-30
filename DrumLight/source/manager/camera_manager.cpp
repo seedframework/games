@@ -21,18 +21,18 @@ void CameraManager::SetArea(const Rect4f &area)
 	cArea = area;
 }
 
-void CameraManager::LookAt(const Vector3f &pos)
+void CameraManager::LookAt(const vec3 &pos)
 {
 	/*
 	Texel/Raster bug - arrendodar a posicao da camera para pixel-perfect.
 	*/
-	Vector3f p = pos + cOffset;
-	s32 x = static_cast<s32>(p.getX());
-	s32 y = static_cast<s32>(p.getY());
-	f32 z = p.getZ();
+	auto p = pos + cOffset;
+	auto x = s32(p.x);
+	auto y = s32(p.y);
+	auto z = p.z;
 
-	s32 halfScreenWidth = pScreen->GetWidth() / 2;
-	s32 halfScreenHeight = pScreen->GetHeight() / 2;
+	auto halfScreenWidth = s32(pScreen->GetWidth() / 2);
+	auto halfScreenHeight = s32(pScreen->GetHeight() / 2);
 
 	if (x < cArea.x1 - 16)
 		x = cArea.x1 - 16;
@@ -46,6 +46,6 @@ void CameraManager::LookAt(const Vector3f &pos)
 	if (x > (cArea.x2 - 16 - halfScreenWidth * 2))
 		x = cArea.x2 - 16 - halfScreenWidth * 2;
 
-	Vector3f np(static_cast<f32>(x), static_cast<f32>(y), z);
+	vec3 np(f32(x), f32(y), z);
 	pCamera->SetPosition(np);
 }

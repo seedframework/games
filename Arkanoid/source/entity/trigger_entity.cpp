@@ -23,7 +23,8 @@ void TriggerEntity::Load(Seed::MetadataObject &metadata, Seed::SceneNode *sprite
 
 void TriggerEntity::OnCollision(const CollisionEvent &event)
 {
-	Entity *other = event.GetOtherEntity();
+	UNUSED(event);
+//	Entity *other = event.GetOtherEntity();
 
 	/*
 	if(event.GetType() == CollisionEventType::OnEnter)

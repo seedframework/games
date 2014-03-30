@@ -27,7 +27,7 @@ void GameOverState::OnStart(void *data)
 void GameOverState::OnUpdate(f32 dt)
 {
 	UNUSED(dt);
-	if(iBeginStateTime + 3000 < pTimer->GetMilliseconds())
+	if (Milliseconds(iBeginStateTime + 3000) < pTimer->GetMilliseconds())
 		gFlow->Menu();
 }
 
