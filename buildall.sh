@@ -21,7 +21,7 @@ then
 	rm lib -rf
 fi
 
-cp ../lib . -r
+cp ../build/lib . -r
 
 git submodule update --init
 
