@@ -5,7 +5,7 @@ build()
 	mkdir $1
 	cd $1
 	pwd
-	qmake ../../$1/$1.pro && make
+	qmake ../../$1/$1.pro "CONFIG=$BUILD" && make
 	RET=$?
 	cd ..
 	return $RET
