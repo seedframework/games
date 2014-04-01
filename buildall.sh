@@ -5,7 +5,7 @@ build()
 	mkdir $1
 	cd $1
 	pwd
-	qmake ../../$1/$1.pro "CONFIG=$BUILD" && make
+	qmake ../../$1/$1.pro "CONFIG+=$BUILD" && make
 	RET=$?
 	cd ..
 	return $RET
@@ -21,7 +21,7 @@ then
 	rm lib -rf
 fi
 
-cp ../build/lib . -r
+cp ../build/lib ./lib -r
 
 git submodule update --init
 
